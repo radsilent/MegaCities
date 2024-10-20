@@ -39,7 +39,8 @@ cities = {
 }
 
 # Load the world map from local shapefile
-world = gpd.read_file(r"C:\Users\colla\OneDrive\Desktop\EnergyCenters\ne_110m_admin_0_countries.shp")
+
+world = gpd.read_file(r"C:\EnergyCenters\Natural_Earth_quick_start\packages\Natural_Earth_quick_start\110m_cultural\ne_110m_admin_0_countries.shp")
 
 # Create a NetworkX graph to store the nodes and edges
 G = nx.Graph()
