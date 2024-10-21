@@ -146,9 +146,6 @@ python megacities_visualization.py
 The map will be generated and displayed, showing the cities and their interconnections based on the MST algorithm.
 You can modify the number of cities, change city coordinates, or tweak visualization parameters as per your needs.
 
-Example Output
-
-(Add an example image of the generated visualization)
 
 Future Enhancements
 We plan to add more features and data to the MegaCities project, such as:
