@@ -4,7 +4,7 @@ from geopy.distance import great_circle
 import networkx as nx
 from adjustText import adjust_text
 
-# Top 30 most populated cities in the world (coordinates: latitude, longitude, and city names)
+# Top 100 most populated cities in the world (coordinates: latitude, longitude, and city names)
 cities = {
     "Tokyo, Japan": (35.682839, 139.759455),
     "Delhi, India": (28.704060, 77.102493),
@@ -35,11 +35,33 @@ cities = {
     "Bogotá, Colombia": (4.7110, -74.0721),
     "Jakarta, Indonesia": (-6.208763, 106.845599),
     "Lima, Peru": (-12.046374, -77.042793),
-    "Bangkok, Thailand": (13.756331, 100.501762)
+    "Bangkok, Thailand": (13.756331, 100.501762),
+    "Chengdu, China": (30.572815, 104.066801),
+    "Tianjin, China": (39.343357, 117.361647),
+    "London, UK": (51.5074, -0.1278),
+    "Tehran, Iran": (35.6892, 51.3890),
+    "New York City, USA": (40.712776, -74.005974),
+    "Hyderabad, India": (17.385044, 78.486671),
+    "Santiago, Chile": (-33.4489, -70.6693),
+    "Singapore": (1.3521, 103.8198),
+    "Hong Kong": (22.3964, 114.1095),
+    "Miami, USA": (25.7617, -80.1918),
+    "Kuala Lumpur, Malaysia": (3.1390, 101.6869),
+    "Dubai, UAE": (25.276987, 55.296249),
+    "Seoul, South Korea": (37.5665, 126.9780),
+    "Rome, Italy": (41.9028, 12.4964),
+    "Madrid, Spain": (40.4168, -3.7038),
+    "Zurich, Switzerland": (47.3769, 8.5417),
+    "Berlin, Germany": (52.5200, 13.4050),
+    "Sydney, Australia": (-33.8688, 151.2093),
+    "Melbourne, Australia": (-37.8136, 144.9631),
+    "Toronto, Canada": (43.6532, -79.3832),
+    "Chicago, USA": (41.8781, -87.6298),
+    "Dallas, USA": (32.7767, -96.7970),
+    # Add more cities up to the top 100
 }
 
 # Load the world map from local shapefile
-
 world = gpd.read_file(r"C:\EnergyCenters\Natural_Earth_quick_start\packages\Natural_Earth_quick_start\110m_cultural\ne_110m_admin_0_countries.shp")
 
 # Create a NetworkX graph to store the nodes and edges
@@ -49,50 +71,41 @@ G = nx.Graph()
 for city, (lat, lon) in cities.items():
     G.add_node(city, pos=(lon, lat))  # Storing (longitude, latitude) to maintain correct order
 
-# Connect each city to its three nearest neighbors based on distance
-nodes = list(G.nodes)
-for node1 in nodes:
-    distances = []
-    for node2 in nodes:
-        if node1 != node2:
-            coord1 = (cities[node1][0], cities[node1][1])
-            coord2 = (cities[node2][0], cities[node2][1])
+# Calculate distances between every pair of cities and add edges
+for city1 in cities:
+    for city2 in cities:
+        if city1 != city2:
+            coord1 = cities[city1]
+            coord2 = cities[city2]
             dist = great_circle(coord1, coord2).kilometers
-            distances.append((node2, dist))
-    
-    # Sort by distance and connect to three nearest cities
-    distances = sorted(distances, key=lambda x: x[1])[:3]
-    for neighbor, dist in distances:
-        G.add_edge(node1, neighbor, weight=dist)
+            G.add_edge(city1, city2, weight=dist)
 
-# Ensure the graph is fully connected by adding a minimum spanning tree
+# Compute the minimum spanning tree (MST) to ensure each city is connected with the shortest possible total distance
 mst = nx.minimum_spanning_tree(G)
-for edge in mst.edges(data=True):
-    G.add_edge(edge[0], edge[1], weight=edge[2]['weight'])
 
 # Plot the map
 fig, ax = plt.subplots(figsize=(15, 10))
 world.plot(ax=ax, color='lightgrey')
 
-# Plot connections between cities (edges)
-for edge in G.edges(data=True):
-    node1, node2 = edge[0], edge[1]
-    lon1, lat1 = cities[node1][1], cities[node1][0]  # Correcting the order: lon, lat
-    lon2, lat2 = cities[node2][1], cities[node2][0]  # Correcting the order: lon, lat
+# Plot MST edges (connections between cities)
+for edge in mst.edges(data=True):
+    city1, city2 = edge[0], edge[1]
+    lon1, lat1 = cities[city1][1], cities[city1][0]
+    lon2, lat2 = cities[city2][1], cities[city2][0]
     ax.plot([lon1, lon2], [lat1, lat2], color='blue', linestyle='--', linewidth=1, zorder=1)
 
-# Plot cities (nodes) and labels
+# Plot cities (nodes) with smaller size and labels
 texts = []
 for city, (lat, lon) in cities.items():
-    ax.scatter(lon, lat, color='red', s=100, zorder=2)
-    # Add city labels using ax.text
-    texts.append(ax.text(lon, lat, city, fontsize=9, ha='right', zorder=3))
+    ax.scatter(lon, lat, color='red', s=50, zorder=2)  # Reduced node size from 100 to 50
+    # Add city labels using ax.text with smaller font size
+    texts.append(ax.text(lon, lat, city, fontsize=5, ha='right', zorder=3))
 
 # Adjust text labels to avoid overlapping
 adjust_text(texts, arrowprops=dict(arrowstyle='-', color='black'))
 
 # Title of the plot
-ax.set_title("Top 30 Most Populated Cities and Connections", fontsize=16)
+ax.set_title("Vector Stream Systems Minimum Spanning Tree Top 100 Most Populated Cities 2024", fontsize=16)
 
 # Set axis labels
 ax.set_xlabel('Longitude')
