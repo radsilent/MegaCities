@@ -37,7 +37,7 @@ Installation
 Clone the repository:
 bash
 Copy code
-git clone https://github.com/yourusername/MegaCities.git
+git clone [https://github.com/yourusername/MegaCities.git](https://github.com/radsilent/MegaCities)
 Install the required dependencies: Navigate into the project directory and install the required Python packages:
 bash
 Copy code
