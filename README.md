@@ -1,6 +1,6 @@
 
 MegaCities - Global Urban Population Visualization
-Welcome to the MegaCities repository! This project visualizes the top 100 most populated cities in the world using geospatial and network-based analysis techniques. By leveraging Python’s powerful libraries, we provide an interactive and insightful visualization of urban population centers, highlighting their interconnectedness via a Minimum Spanning Tree (MST).
+Welcome to the MegaCities repository! This project visualizes the most populated cities in the world using geospatial and network-based analysis techniques. By leveraging Python’s powerful libraries, we provide an interactive and insightful visualization of urban population centers, highlighting their interconnectedness via a Minimum Spanning Tree (MST).
 
 ![MegaCities](https://github.com/user-attachments/assets/74ddfc19-144e-4366-ab11-16ee03b299a8)
 
